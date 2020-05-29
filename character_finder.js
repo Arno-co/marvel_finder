@@ -10,13 +10,23 @@ function CharacterFinder (primaryCharacter, secondaryCharacter = null) {
 
 }
 
-CharacterFinder.prototype.getId = function () {
-    APIUtil.fetchCharacterByName(this.primaryCharacter)
+CharacterFinder.prototype.getId = async function() {
+    let character = await APIUtil.fetchCharacterByName(this.primaryCharacter)
+    .then(response => {
+       return response
+    })
+    .catch(error => {
+        console.log(error);
+    });
+    console.log(typeof character)
+    return character
+    // console.log(typeof characterObject)
+    // console.log(characterObject.comics.items, 'character')
 }
 
 
 
-let c = new CharacterFinder('Storm');
+let c = new CharacterFinder('Emma Frost');
 c.getId()
 
 async function foo() {
