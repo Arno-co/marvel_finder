@@ -1,5 +1,5 @@
 const request = require('request');
-// const api_helper = require('./API_helper');
+
 
 module.exports = {
     make_API_call: function (url) {

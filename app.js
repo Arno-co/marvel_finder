@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 const api_helper = require('./API_helper')
 const keys_helper = require('./keys_helper')
-// const characters = require('./characters.json')
 const keys = require ('./keys')
 const app = express()
 const port = 3000
@@ -15,73 +14,33 @@ app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     res.send(`Welcome to Marvel Character Finder`)
-    // res.json(characters.forEach(character => character.name))
 })
 
-app.get('/characters', (req, res) => {
+app.get('/characters', async (req, res) => {
 
-    // let writeStream = fs.createWriteStream('./characters.json');
+        // let output = [];
 
-    // for (let i = 0; i <= 200; i += 100) {
-    //     api_helper.make_API_call(`https://gateway.marvel.com:443/v1/public/characters?limit=100&offset=${i}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`)
-    //         .then(response => {
-    //             res.json(response);
-    //             let data = JSON.stringify(response.data.results, null, 2)
-    //             console.log(data)
-    //             // writeStream.write(data);
-    //         })
-    //         .catch(error => {
-    //             res.send(error)
-    //         })
-    // }
-
-    // write some data with a base64 encoding
-    
-
-    // the finish event is emitted when all data has been flushed from the stream
-    // writeStream.on('finish', () => {
-    //     console.log('wrote all data to file');
-    // });
-
-    // close the stream
-    // writeStream.end();
-
-
-    // const fileName = './characters.json'
-    // fs.exists(fileName, function (exists) {
-    //     if (exists) {
-    //         // get information about the file
-    //         fs.stat(fileName, function (error, stats) {
-    //             // open the file (getting a file descriptor to it)
-    //             fs.open(fileName, "r", function (error, fd) {
-    //                 // var buffer = new Buffer(stats.size);
-
-    //                 // // read its contents into buffer
-    //                 // fs.read(fd, buffer, 0, buffer.length, null, function (error, bytesRead, buffer) {
-    //                 //     var data = buffer.toString("utf8", 0, buffer.length);
-
-    //                 //     console.log(data);
-    //                 //     fs.close(fd);
-    //                 // });
-
-                    
-    //             });
-    //         });
-    //     }
-    // });
-    
-    api_helper.make_API_call(`https://gateway.marvel.com:443/v1/public/characters?limit=100&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`)
+        for (i=0; i<=1500; i+=100) {
+            let api_key = `https://gateway.marvel.com:443/v1/public/characters?limit=100&offset=${i}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`;
+            await api_helper.make_API_call(api_key)
         .then(response => {
-            res.json(response);
-            let data = JSON.stringify(response.data.results, null, 2)
-            fs.writeFile('./characters.json', data, (err) => {
-                if (err) throw err;
-                console.log('The file has been saved!');
-            });
-        })
-        .catch(error => {
-            res.send(error)
-        })
+            let data = response.data.results
+
+            for (let j = 0; j < data.length; j++) {
+                // output[data[j].id] = JSON.stringify(data[j], null, 2)
+                // output.push(JSON.stringify(data[j], null, 2))
+                console.log(data[j].name)
+            }
+        });
+        }
+
+    // fs.writeFileSync('./characters.json', output, (err) => {
+    //     if (err) throw err;
+    //     console.log('The file has been saved!');
+    //     });
+        
+        res.send('The list of Marvel characters is available on the terminal')
+
 })
 
 app.get(`/characters/:characterId`, (req, res) => {
