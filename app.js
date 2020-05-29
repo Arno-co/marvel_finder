@@ -23,13 +23,13 @@ app.get('/characters', async (req, res) => {
         for (i=0; i<=1500; i+=100) {
             let api_key = `https://gateway.marvel.com:443/v1/public/characters?limit=100&offset=${i}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`;
             await api_helper.make_API_call(api_key)
-        .then(response => {
-            let data = response.data.results
-            for (let j = 0; j < data.length; j++) {
-                console.log(data[j].name)
-                output.push(data[j])
-            }
-        })
+            .then(response => {
+                let data = response.data.results
+                for (let j = 0; j < data.length; j++) {
+                    console.log(data[j].name)
+                    output.push(data[j])
+                }
+            })
         }
 
     fs.writeFileSync('./characters.json', JSON.stringify(output, null, 2), (err) => {
@@ -40,6 +40,8 @@ app.get('/characters', async (req, res) => {
         res.send("The list of Marvel characters names is available on the terminal and the characters are saved in './characters.json' file")
 
 })
+
+// TEST ROUTES
 
 app.get(`/characters/:characterId`, (req, res) => {
     let characterId = req.params.characterId
