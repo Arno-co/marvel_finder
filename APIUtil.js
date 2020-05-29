@@ -6,15 +6,28 @@ const keys = require('./keys')
 
 module.exports = {
     fetchCharacterByName:  async function (name) {
-        let apiKey = `https://gateway.marvel.com:443/v1/public/characters?name=${name}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`
-        await api_helper.make_API_call(apiKey)
+        let apiKeyName = `https://gateway.marvel.com:443/v1/public/characters?name=${name}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`
+        
+        const characterId = await api_helper.make_API_call(apiKeyName)
+        .then(response => {
+            // let data = JSON.stringify(response.data.results, null, 2)
+            return(response.data.results[0].id);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+        
+        let apiKeyId = `https://gateway.marvel.com:443/v1/public/characters/${characterId}?ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`
+        
+        const character = await api_helper.make_API_call(apiKeyId)
             .then(response => {
-                let data = JSON.stringify(response.data.results, null, 2)
-                console.log(data[0].id);
-
+                console.log(JSON.stringify(response.data.results[0], null, 2))
             })
             .catch(error => {
                 console.log(error);
             });
     }
 }
+
+
+
