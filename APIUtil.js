@@ -8,7 +8,6 @@ module.exports = {
         let apiKeyName = `https://gateway.marvel.com:443/v1/public/characters?name=${name}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`
         const characterId = await api_helper.make_API_call(apiKeyName)
         .then(response => {
-            // let data = JSON.stringify(response.data.results, null, 2)
             return(response.data.results[0].id);
         })
         .catch(error => {
@@ -26,6 +25,17 @@ module.exports = {
             });
 
         return character     
+    },
+    fetchCharacterIdByName: async function (name) {
+        let apiKeyName = `https://gateway.marvel.com:443/v1/public/characters?name=${name}&ts=${Date.now()}&apikey=${keys.public}&hash=${keys_helper.hashedKeys()}`
+        const characterId = await api_helper.make_API_call(apiKeyName)
+            .then(response => {
+                return (response.data.results[0].id);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        return characterId
     },
     fetchComicsById: async function (id, num) {
         if (num%100 !== 0) {
@@ -70,7 +80,6 @@ module.exports = {
                 });
 
         }
-        // console.log(comics)
         return comics
     },
     fetchJoinComicList: async function (id1, num1, id2, num2) {
