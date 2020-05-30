@@ -74,7 +74,6 @@ CharacterFinder.prototype.getComicsById = async function(id, num) {
         .catch(error => {
             console.log(error);
         });
-    console.log(typeof comics)
     return comics
 }
 

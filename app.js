@@ -37,7 +37,7 @@ app.get('/characters', async (req, res) => {
         console.log('The file has been saved!');
         });
         
-        res.send("The list of Marvel characters names is available on the terminal and the characters are saved in './characters.json' file")
+        res.send("The list of Marvel characters names is available on the server's terminal and the characters are saved in './characters.json' file")
 
 })
 
